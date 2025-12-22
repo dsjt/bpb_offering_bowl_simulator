@@ -361,7 +361,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 33,
@@ -383,7 +383,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 279,
@@ -394,7 +394,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 281,
@@ -405,7 +405,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 291,
@@ -1219,7 +1219,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 345,
@@ -1912,7 +1912,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 165,
@@ -1956,7 +1956,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 169,
@@ -2616,7 +2616,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": true,
-      "special_items": false
+      "special_items": "カードデッキ"
     },
     {
       "id": 329,
@@ -4057,7 +4057,7 @@ itemsData = {
         "メイジ"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "パズルボックス"
     },
     {
       "id": 370,
@@ -4068,7 +4068,7 @@ itemsData = {
         "メイジ"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "パズルボックス"
     },
     {
       "id": 371,
@@ -4079,7 +4079,7 @@ itemsData = {
         "メイジ"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "パズルボックス"
     },
     {
       "id": 372,
@@ -4090,7 +4090,7 @@ itemsData = {
         "メイジ"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "パズルボックス"
     },
     {
       "id": 373,
@@ -4101,7 +4101,7 @@ itemsData = {
         "メイジ"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "パズルボックス"
     },
     {
       "id": 374,
