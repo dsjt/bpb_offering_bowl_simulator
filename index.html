@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>供物皿シミュレータ2 - Offering Bowl Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>供物皿シミュレータ2</h1>
+            <p class="subtitle">Offering Bowl Probability Calculator</p>
+        </header>
+
+        <div class="main-content">
+          <div class="settings-panel">
+            <h2>条件設定</h2>
+
+            <div class="setting-group">
+              <label for="offering-amount">供物金額</label>
+              <div class="slider-container">
+                <input type="range" id="offering-amount" min="1" max="16" value="7" step="1">
+                <input type="number" id="offering-amount-input" min="1" max="16" value="7" class="amount-input">
+                <span>ゴールド</span>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <label for="round">ラウンド:(生成されるラウンド)</label>
+              <select id="round">
+                <option value="2 selected">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12+</option>
+              </select>
+            </div>
+
+            <div class="setting-group">
+              <label>バッジ:</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" id="badge-leaf" value="レンジャー"> リーフバッジ (レンジャー)</label>
+                <label><input type="checkbox" id="badge-skull" value="リーパー"> スカルバッジ (Reaper)</label>
+                <label><input type="checkbox" id="badge-wolf" value="バーサーカー"> ウルフバッジ (Berserker)</label>
+                <label><input type="checkbox" id="badge-magic" value="メイジ"> マジックバッジ (Mage)</label>
+                <label><input type="checkbox" id="badge-thread" value="アドベンチャラー"> 結び糸バッジ (Adventurer)</label>
+                <label><input type="checkbox" id="badge-stone" value="ストーン"> ストーンバッジ </label>
+              </div>
+            </div>
+
+            <div class="setting-group">
+              <label>特殊アイテム:</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" id="special-treasure" value="富の宝箱"> 富の宝箱</label>
+                <label><input type="checkbox" id="special-chessboard" value="チェスボード"> チェスボード</label>
+              </div>
+            </div>
+
+            <button id="calculate-btn" class="calculate-btn">計算する</button>
+          </div>
+
+          <div class="right-panel">
+
+            <div class="pool-summary-panel">
+              <h3>プールサマリー</h3>
+              <div id="pool-summary" class="summary-content">
+                <p class="placeholder">条件を設定してください</p>
+              </div>
+            </div>
+            <div class="item-pool-panel">
+              <h2>アイテムプール</h2>
+              <table id="item-pool-table" class="item-table">
+                <thead>
+                  <tr>
+                    <th data-sort="name">アイテム名</th>
+                    <th data-sort="price" class="sorted-asc">金額</th>
+                    <th data-sort="rarity">レアリティ</th>
+                    <th data-sort="tier">価格帯</th>
+                    <th data-sort="probability">出現確率</th>
+                  </tr>
+                </thead>
+                <tbody id="item-pool-body">
+                  <tr><td colspan="4" class="placeholder">条件を設定してください</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="items.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
