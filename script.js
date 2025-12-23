@@ -87,7 +87,7 @@ let currentPool = { highTier: [], lowTier: [] };
 
 // アイテムプールの更新
 function updateItemPool() {
-    const budget = parseInt(document.getElementById('offering-amount').value)-1;
+    const budget = parseInt(document.getElementById('offering-amount').value)-1; // 1フレイム分を除く
     const round = parseInt(document.getElementById('round').value);
 
     const badges = [];
@@ -358,16 +358,16 @@ function splitPriceTiers(items) {
 function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
     const allItems = [...highTier, ...lowTier];
 
-    // 事前計算: 各予算での価格帯分割を一度だけ計算
-    const tiersByBudget = new Map();
-    for (let b = 1; b <= budget; b++) {
-        const affordableItems = allItems.filter(item => item.price <= b);
-        if (affordableItems.length > 0) {
-            tiersByBudget.set(b, splitPriceTiers(affordableItems));
-        } else {
-            tiersByBudget.set(b, { highTier: [], lowTier: [] });
-        }
-    }
+    // // 事前計算: 各予算での価格帯分割を一度だけ計算
+    // const tiersByBudget = new Map();
+    // for (let b = 1; b <= budget; b++) {
+    //     const affordableItems = allItems.filter(item => item.price <= b);
+    //     if (affordableItems.length > 0) {
+    //         tiersByBudget.set(b, splitPriceTiers(affordableItems));
+    //     } else {
+    //         tiersByBudget.set(b, { highTier: [], lowTier: [] });
+    //     }
+    // }
 
     // dp[残予算] = { itemId: 期待獲得数 }
     const dp = Array(budget + 1).fill(null).map(() => ({}));
@@ -381,9 +381,13 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
 
     // 予算ごとに計算（DP）
     for (let currentBudget = 1; currentBudget <= budget; currentBudget++) {
-        const { highTier: currentHigh, lowTier: currentLow } = tiersByBudget.get(currentBudget);
+        const affordableItems = allItems.filter(item => item.price <= currentBudget);
 
-        if (currentHigh.length === 0 && currentLow.length === 0) continue;
+        if (affordableItems.length === 0) continue;
+
+        // この予算での価格帯分割を計算（効率が悪いが、保留中）
+        const { highTier: currentHigh, lowTier: currentLow } = splitPriceTiers(affordableItems);
+        // const { highTier: currentHigh, lowTier: currentLow } = tiersByBudget.get(currentBudget);
 
         // 高価格帯からの選択（確率90%）
         if (currentHigh.length > 0) {
