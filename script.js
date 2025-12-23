@@ -33,12 +33,6 @@ function setupEventListeners() {
     const offeringAmountValue = document.getElementById('offering-amount-value');
     const offeringAmountInput = document.getElementById('offering-amount-input');
 
-    // offeringAmount.addEventListener('input', (e) => {
-    //     offeringAmountValue.textContent = e.target.value;
-    //     updateItemPool(); // リアルタイム更新
-    //     calculateProbabilities(); // 追加
-    // });
-
     offeringAmount.addEventListener('input', (e) => {
         offeringAmountInput.value = e.target.value;
         updateItemPool();
@@ -385,7 +379,7 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
         }
     });
 
-    // 予算ごとに計算
+    // 予算ごとに計算（DP）
     for (let currentBudget = 1; currentBudget <= budget; currentBudget++) {
         const { highTier: currentHigh, lowTier: currentLow } = tiersByBudget.get(currentBudget);
 
@@ -632,7 +626,7 @@ function displayProbabilityChart(items, probabilities) {
     });
 }
 
-// 新しい関数を追加
+// プールサマリーの更新
 function updatePoolSummary() {
     const summaryContainer = document.getElementById('pool-summary');
     const allItems = [...currentPool.highTier, ...currentPool.lowTier];
