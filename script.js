@@ -362,37 +362,44 @@ function splitPriceTiers(items) {
 
 // 動的計画法による厳密な確率計算
 function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
+    const allItems = [...highTier, ...lowTier];
+
+    // 事前計算: 各予算での価格帯分割を一度だけ計算
+    const tiersByBudget = new Map();
+    for (let b = 1; b <= budget; b++) {
+        const affordableItems = allItems.filter(item => item.price <= b);
+        if (affordableItems.length > 0) {
+            tiersByBudget.set(b, splitPriceTiers(affordableItems));
+        } else {
+            tiersByBudget.set(b, { highTier: [], lowTier: [] });
+        }
+    }
+
     // dp[残予算] = { itemId: 期待獲得数 }
     const dp = Array(budget + 1).fill(null).map(() => ({}));
 
     // 全アイテムIDを初期化
-    const allItems = [...highTier, ...lowTier];
     allItems.forEach(item => {
         for (let b = 0; b <= budget; b++) {
             dp[b][item.id] = 0;
         }
     });
 
-    // 予算が大きい方から小さい方へ計算（逆順DP）
+    // 予算ごとに計算
     for (let currentBudget = 1; currentBudget <= budget; currentBudget++) {
-        // 購入可能なアイテムのフィルタリング
-        const affordableHigh = highTier.filter(item => item.price <= currentBudget);
-        const affordableLow = lowTier.filter(item => item.price <= currentBudget);
+        const { highTier: currentHigh, lowTier: currentLow } = tiersByBudget.get(currentBudget);
 
-        // 購入可能なアイテムがない場合はスキップ
-        if (affordableHigh.length === 0 && affordableLow.length === 0) continue;
+        if (currentHigh.length === 0 && currentLow.length === 0) continue;
 
         // 高価格帯からの選択（確率90%）
-        if (affordableHigh.length > 0) {
-            const probPerItem = HIGH_TIER_PROBABILITY / affordableHigh.length;
+        if (currentHigh.length > 0) {
+            const probPerItem = HIGH_TIER_PROBABILITY / currentHigh.length;
 
-            affordableHigh.forEach(item => {
+            currentHigh.forEach(item => {
                 const remainingBudget = currentBudget - item.price;
 
-                // このアイテムを獲得する確率を加算
                 dp[currentBudget][item.id] += probPerItem;
 
-                // 残予算での期待獲得数を加算
                 if (remainingBudget > 0) {
                     allItems.forEach(futureItem => {
                         dp[currentBudget][futureItem.id] += probPerItem * dp[remainingBudget][futureItem.id];
@@ -402,16 +409,14 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
         }
 
         // 低価格帯からの選択（確率10%）
-        if (affordableLow.length > 0) {
-            const probPerItem = (1 - HIGH_TIER_PROBABILITY) / affordableLow.length;
+        if (currentLow.length > 0) {
+            const probPerItem = (1 - HIGH_TIER_PROBABILITY) / currentLow.length;
 
-            affordableLow.forEach(item => {
+            currentLow.forEach(item => {
                 const remainingBudget = currentBudget - item.price;
 
-                // このアイテムを獲得する確率を加算
                 dp[currentBudget][item.id] += probPerItem;
 
-                // 残予算での期待獲得数を加算
                 if (remainingBudget > 0) {
                     allItems.forEach(futureItem => {
                         dp[currentBudget][futureItem.id] += probPerItem * dp[remainingBudget][futureItem.id];
@@ -421,11 +426,7 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
         }
     }
 
-    // 結果を取得（期待獲得数から出現確率へ変換）
-    // 期待獲得数 = そのアイテムが1回以上出る確率の合計ではないため
-    // より正確には、1回以上獲得する確率を計算する必要がある
-
-    // 簡易版：期待獲得数をそのままパーセンテージとして使用
+    // 結果を取得
     const result = {};
     allItems.forEach(item => {
         result[item.id] = dp[budget][item.id] * 100;
