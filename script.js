@@ -471,36 +471,47 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
 
 // 確率計算（シミュレーション）
 function calculateItemProbabilitiesSimulation(budget, highTier, lowTier) {
+    const allItems = [...highTier, ...lowTier];
     const itemCounts = {};
     const numSimulations = 10000;
 
-    // 全アイテムを初期化
-    [...highTier, ...lowTier].forEach(item => {
+    allItems.forEach(item => {
         itemCounts[item.id] = 0;
     });
 
-    // シミュレーション実行
     for (let sim = 0; sim < numSimulations; sim++) {
         let remainingBudget = budget;
 
         while (remainingBudget > 0) {
-            // 高価格帯/低価格帯の選択
-            const useHighTier = Math.random() < HIGH_TIER_PROBABILITY;
-            const selectedTier = useHighTier ? highTier : lowTier;
-
-            // 購入可能なアイテムのフィルタリング
-            const affordableItems = selectedTier.filter(item => item.price <= remainingBudget);
+            // 残予算で購入可能なアイテムをフィルタ
+            const affordableItems = allItems.filter(item => item.price <= remainingBudget);
 
             if (affordableItems.length === 0) break;
 
-            // 一様ランダムに選択
-            const selectedItem = affordableItems[Math.floor(Math.random() * affordableItems.length)];
-            itemCounts[selectedItem.id]++;
-            remainingBudget -= selectedItem.price;
+            // 残予算での価格帯分割
+            const { highTier: currentHigh, lowTier: currentLow } = splitPriceTiers(affordableItems);
+
+            // 高価格帯/低価格帯を確率で選択
+            const useHighTier = Math.random() < HIGH_TIER_PROBABILITY;
+            const selectedTier = useHighTier ? currentHigh : currentLow;
+
+            if (selectedTier.length === 0) {
+                // 選択した価格帯にアイテムがない場合は反対側から選択
+                const alternateTier = useHighTier ? currentLow : currentHigh;
+                if (alternateTier.length === 0) break;
+
+                const selectedItem = alternateTier[Math.floor(Math.random() * alternateTier.length)];
+                itemCounts[selectedItem.id]++;
+                remainingBudget -= selectedItem.price;
+            } else {
+                // 選択した価格帯から一様ランダムに選択
+                const selectedItem = selectedTier[Math.floor(Math.random() * selectedTier.length)];
+                itemCounts[selectedItem.id]++;
+                remainingBudget -= selectedItem.price;
+            }
         }
     }
 
-    // 確率に変換
     const probabilities = {};
     Object.keys(itemCounts).forEach(itemId => {
         probabilities[itemId] = (itemCounts[itemId] / numSimulations) * 100;
