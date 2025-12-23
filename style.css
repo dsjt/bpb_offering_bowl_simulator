@@ -610,3 +610,73 @@ header h1 {
         gap: 10px;
     }
 }
+
+.toggle-method-btn {
+    width: 100%;
+    padding: 12px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.toggle-method-btn:hover {
+    background: #4b5563;
+}
+
+.run-simulation-btn {
+    width: 100%;
+    padding: 12px;
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.run-simulation-btn:hover {
+    background: #059669;
+}
+
+#round-stage {
+    flex: 1;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 5px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#round-stage::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+#round-stage::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+}
+
+#round-stage-label {
+    min-width: 100px;
+    font-weight: bold;
+    color: var(--primary-color);
+}

@@ -18,6 +18,7 @@ const RARITY_RATES = {
 const HIGH_TIER_PROBABILITY = 0.9;
 
 let isRelativeScale = true; // 相対表示がデフォルト
+let useDP = true; // DPがデフォルト
 
 let chartInstance = null;
 
@@ -30,37 +31,38 @@ document.addEventListener('DOMContentLoaded', () => {
 // イベントリスナーの設定
 function setupEventListeners() {
     const offeringAmount = document.getElementById('offering-amount');
-    const offeringAmountValue = document.getElementById('offering-amount-value');
     const offeringAmountInput = document.getElementById('offering-amount-input');
 
     offeringAmount.addEventListener('input', (e) => {
         offeringAmountInput.value = e.target.value;
         updateItemPool();
-        calculateProbabilities(); // 追加
     });
 
     offeringAmountInput.addEventListener('input', (e) => {
         offeringAmount.value = e.target.value;
         updateItemPool();
-        calculateProbabilities(); // 追加
     });
 
-    document.getElementById('round').addEventListener('change', () => {
+    // ラウンドステージのスライダー
+    const roundStage = document.getElementById('round-stage');
+    const roundStageLabel = document.getElementById('round-stage-label');
+
+    roundStage.addEventListener('input', (e) => {
+        const stage = parseInt(e.target.value);
+        const labels = ['1-2ラウンド', '3-4ラウンド', '5-18ラウンド'];
+        roundStageLabel.textContent = labels[stage - 1];
         updateItemPool();
-        calculateProbabilities();
     });
 
     document.querySelectorAll('[id^="badge-"]').forEach(cb => {
         cb.addEventListener('change', () => {
             updateItemPool();
-            calculateProbabilities();
         });
     });
 
     document.querySelectorAll('[id^="special-"]').forEach(cb => {
         cb.addEventListener('change', () => {
             updateItemPool();
-            calculateProbabilities();
         });
     });
 
@@ -77,10 +79,38 @@ function setupEventListeners() {
         displayItemPoolTable(); // 再描画
     });
 
+    // 計算方法切り替えボタン
+    document.getElementById('toggle-method-btn').addEventListener('click', () => {
+        useDP = !useDP;
+        const toggleBtn = document.getElementById('toggle-method-btn');
+        const runBtn = document.getElementById('run-simulation-btn');
+
+        toggleBtn.textContent = useDP ? 'シミュレーションに切り替え' : 'DPに切り替え';
+        runBtn.style.display = useDP ? 'none' : 'block';
+
+        calculateProbabilities(); // 切り替え時に自動実行
+    });
+
+    // シミュレーション実行ボタン
+    document.getElementById('run-simulation-btn').addEventListener('click', () => {
+        calculateProbabilities();
+    });
+
     // 初期表示
     updateItemPool();
     calculateProbabilities();
 }
+
+// ラウンドステージから実際のラウンド数に変換
+function getRoundFromStage(stage) {
+    switch(stage) {
+        case 1: return 2;  // 1-2ラウンドの代表値
+        case 2: return 4;  // 3-4ラウンドの代表値
+        case 3: return 8;  // 5-18ラウンドの代表値
+        default: return 8;
+    }
+}
+
 
 let currentSort = { column: 'price', order: 'asc' };
 let currentPool = { highTier: [], lowTier: [] };
@@ -88,7 +118,8 @@ let currentPool = { highTier: [], lowTier: [] };
 // アイテムプールの更新
 function updateItemPool() {
     const budget = parseInt(document.getElementById('offering-amount').value)-1; // 1フレイム分を除く
-    const round = parseInt(document.getElementById('round').value);
+    const roundStage = parseInt(document.getElementById('round-stage').value);
+    const round = getRoundFromStage(roundStage);
 
     const badges = [];
     // 通常バッジのみを配列に追加（ストーンとレインボーは除外）
@@ -109,6 +140,11 @@ function updateItemPool() {
 
     currentPool = { highTier, lowTier };
     displayItemPoolTable();
+
+    // DPモードの時だけ自動で確率計算
+    if (useDP) {
+        calculateProbabilities();
+    }
 }
 
 // テーブル表示
@@ -434,7 +470,7 @@ function calculateItemProbabilitiesDP(budget, highTier, lowTier) {
 }
 
 // 確率計算（シミュレーション）
-function calculateItemProbabilities(budget, highTier, lowTier) {
+function calculateItemProbabilitiesSimulation(budget, highTier, lowTier) {
     const itemCounts = {};
     const numSimulations = 10000;
 
@@ -485,7 +521,12 @@ function calculateProbabilities() {
     }
 
     // 確率計算
-    itemProbabilities = calculateItemProbabilitiesDP(budget, currentPool.highTier, currentPool.lowTier);
+    // 計算方法を切り替え
+    if (useDP) {
+        itemProbabilities = calculateItemProbabilitiesDP(budget, currentPool.highTier, currentPool.lowTier);
+    } else {
+        itemProbabilities = calculateItemProbabilitiesSimulation(budget, currentPool.highTier, currentPool.lowTier);
+    }
 
     // テーブル更新
     displayItemPoolTable();
