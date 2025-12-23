@@ -506,3 +506,107 @@ select:hover {
     transition: background 0.2s;
     /* margin-left: auto; /\* 追加：右寄せ *\/ */
 }
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.header-icon {
+    flex-shrink: 0;
+}
+
+.header-text {
+    text-align: left;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+    text-shadow: none;
+    color: #1e40af;
+}
+
+.subtitle {
+    font-size: 1.1em;
+    opacity: 1;
+    color: #4b5563;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-text {
+        text-align: center;
+    }
+
+    .header-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.footer {
+    background: var(--panel-bg);
+    border-top: 2px solid var(--border-color);
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.9em;
+    color: #6b7280;
+}
+
+.footer-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.game-version {
+    font-family: monospace;
+    color: #9ca3af;
+}
+
+.twitter-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.twitter-link:hover {
+    color: var(--secondary-color);
+}
+
+.twitter-link svg {
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

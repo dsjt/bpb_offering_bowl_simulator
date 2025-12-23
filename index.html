@@ -1,108 +1,152 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>供物皿シミュレータ - Offering Bowl Simulator</title>
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
+      <header>
+        <div class="header-content">
+          <svg class="header-icon" width="60" height="60" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- 外側の縁 -->
+            <circle cx="100" cy="100" r="95" fill="#8B7355" stroke="#5C4A3A" stroke-width="3"/>
+            <!-- 内側の皿部分 -->
+            <circle cx="100" cy="100" r="85" fill="#D4AF37"/>
+            <!-- 中央の円形装飾 -->
+            <circle cx="100" cy="100" r="25" fill="#F4D03F" stroke="#C9A500" stroke-width="2"/>
+            <circle cx="100" cy="100" r="15" fill="#D4AF37"/>
+            <circle cx="100" cy="100" r="5" fill="#F4D03F"/>
+            <!-- 放射状の装飾（8方向） -->
+            <g opacity="0.6">
+              <path d="M 100 25 L 110 75 L 90 75 Z" fill="#F4D03F"/>
+              <path d="M 175 100 L 125 110 L 125 90 Z" fill="#F4D03F"/>
+              <path d="M 100 175 L 110 125 L 90 125 Z" fill="#F4D03F"/>
+              <path d="M 25 100 L 75 110 L 75 90 Z" fill="#F4D03F"/>
+              <path d="M 153 47 L 120 85 L 107 65 Z" fill="#E8C547"/>
+              <path d="M 153 153 L 115 115 L 135 107 Z" fill="#E8C547"/>
+              <path d="M 47 153 L 85 120 L 93 135 Z" fill="#E8C547"/>
+              <path d="M 47 47 L 80 80 L 65 93 Z" fill="#E8C547"/>
+            </g>
+            <!-- ハイライト効果 -->
+            <ellipse cx="100" cy="60" rx="50" ry="15" fill="white" opacity="0.2"/>
+          </svg>
+          <div class="header-text">
             <h1>供物皿シミュレータ</h1>
-            <p class="subtitle">Offering Bowl Probability Calculator</p>
-        </header>
-
-        <div class="main-content">
-          <div class="settings-panel">
-            <h2>条件設定</h2>
-
-            <div class="setting-group">
-              <label for="offering-amount">供物金額</label>
-              <div class="slider-container">
-                <input type="range" id="offering-amount" min="1" max="16" value="7" step="1">
-                <input type="number" id="offering-amount-input" min="1" max="16" value="7" class="amount-input">
-                <span>ゴールド</span>
-              </div>
-            </div>
-
-            <div class="setting-group">
-              <label for="round">ラウンド:(生成されるラウンド)</label>
-              <select id="round">
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6 selected">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12+</option>
-              </select>
-            </div>
-
-            <div class="setting-group">
-              <label>バッジ:</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" id="badge-leaf" value="レンジャー"> リーフバッジ (レンジャー)</label>
-                <label><input type="checkbox" id="badge-skull" value="リーパー"> スカルバッジ (リーパー)</label>
-                <label><input type="checkbox" id="badge-wolf" value="バーサーカー"> ウルフバッジ (バーサーカー)</label>
-                <label><input type="checkbox" id="badge-magic" value="メイジ"> マジックバッジ (メイジ)</label>
-                <label><input type="checkbox" id="badge-string" value="アドベンチャラー"> 結び糸バッジ (アドベンチャラー)</label>
-                <label><input type="checkbox" id="badge-stone" value="ストーン"> ストーンバッジ （除外）</label>
-                <label><input type="checkbox" id="badge-rainbow" value="レインボー"> レインボーバッジ （全クラス）</label>
-              </div>
-            </div>
-
-            <div class="setting-group">
-              <label>特殊アイテム:</label>
-              <div class="checkbox-group">
-                <label><input type="checkbox" id="special-treasure" value="富の宝箱"> 富の宝箱</label>
-                <label><input type="checkbox" id="special-card" value="カードデッキ"> カードデッキ</label>
-                <label><input type="checkbox" id="special-chessboard" value="チェスボード"> チェスボード</label>
-                <label><input type="checkbox" id="special-dragon" value="ドラゴンの寝床"> ドラゴンの寝床</label>
-                <label><input type="checkbox" id="special-frozen" value="frozen_flame"> フローズンフレイム</label></div>
-            </div>
-
-          </div>
-
-          <div class="right-panel">
-
-            <div class="pool-summary-panel">
-              <h3>プールサマリー</h3>
-              <div id="pool-summary" class="summary-content">
-                <p class="placeholder">条件を設定してください</p>
-              </div>
-            </div>
-            <div class="item-pool-panel">
-              <div class="panel-header">
-                <h2>アイテムプール</h2>
-                <button id="toggle-scale-btn" class="toggle-scale-btn">絶対表示に切り替え</button>
-              </div>
-              <table id="item-pool-table" class="item-table">
-                <thead>
-                  <tr>
-                    <th data-sort="name">アイテム名</th>
-                    <th data-sort="price" class="sorted-asc">金額</th>
-                    <th data-sort="rarity">レアリティ</th>
-                    <th data-sort="tier">価格帯</th>
-                    <th data-sort="probability">出現確率</th>
-                  </tr>
-                </thead>
-                <tbody id="item-pool-body">
-                  <tr><td colspan="4" class="placeholder">条件を設定してください</td></tr>
-                </tbody>
-              </table>
-            </div>
-
+            <p class="subtitle">Offering Bowl Simulator</p>
           </div>
         </div>
+      </header>
+
+      <div class="main-content">
+        <div class="settings-panel">
+          <h2>条件設定</h2>
+
+          <div class="setting-group">
+            <label for="offering-amount">供物金額</label>
+            <div class="slider-container">
+              <input type="range" id="offering-amount" min="1" max="16" value="7" step="1">
+              <input type="number" id="offering-amount-input" min="1" max="16" value="7" class="amount-input">
+              <span>ゴールド</span>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label for="round">ラウンド:(生成されるラウンド)</label>
+            <select id="round">
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6 selected">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12+</option>
+            </select>
+          </div>
+
+          <div class="setting-group">
+            <label>バッジ:</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="badge-leaf" value="レンジャー"> リーフバッジ (レンジャー)</label>
+              <label><input type="checkbox" id="badge-skull" value="リーパー"> スカルバッジ (リーパー)</label>
+              <label><input type="checkbox" id="badge-wolf" value="バーサーカー"> ウルフバッジ (バーサーカー)</label>
+              <label><input type="checkbox" id="badge-magic" value="メイジ"> マジックバッジ (メイジ)</label>
+              <label><input type="checkbox" id="badge-string" value="アドベンチャラー"> 結び糸バッジ (アドベンチャラー)</label>
+              <label><input type="checkbox" id="badge-stone" value="ストーン"> ストーンバッジ （除外）</label>
+              <label><input type="checkbox" id="badge-rainbow" value="レインボー"> レインボーバッジ （全クラス）</label>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <label>特殊アイテム:</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" id="special-treasure" value="富の宝箱"> 富の宝箱</label>
+              <label><input type="checkbox" id="special-card" value="カードデッキ"> カードデッキ</label>
+              <label><input type="checkbox" id="special-chessboard" value="チェスボード"> チェスボード</label>
+              <label><input type="checkbox" id="special-dragon" value="ドラゴンの寝床"> ドラゴンの寝床</label>
+              <label><input type="checkbox" id="special-frozen" value="frozen_flame"> フローズンフレイム</label></div>
+          </div>
+
+        </div>
+
+        <div class="right-panel">
+
+          <div class="pool-summary-panel">
+            <h3>プールサマリー</h3>
+            <div id="pool-summary" class="summary-content">
+              <p class="placeholder">条件を設定してください</p>
+            </div>
+          </div>
+          <div class="item-pool-panel">
+            <div class="panel-header">
+              <h2>アイテムプール</h2>
+              <button id="toggle-scale-btn" class="toggle-scale-btn">絶対表示に切り替え</button>
+            </div>
+            <table id="item-pool-table" class="item-table">
+              <thead>
+                <tr>
+                  <th data-sort="name">アイテム名</th>
+                  <th data-sort="price" class="sorted-asc">金額</th>
+                  <th data-sort="rarity">レアリティ</th>
+                  <th data-sort="tier">価格帯</th>
+                  <th data-sort="probability">出現確率</th>
+                </tr>
+              </thead>
+              <tbody id="item-pool-body">
+                <tr><td colspan="4" class="placeholder">条件を設定してください</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
     </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <span class="game-version">Game Version: v1.0.9b (2024-12-23時点)</span>
+        </div>
+        <div class="footer-section">
+          <span>Created by だいし</span>
+          <a href="https://x.com/daishijtt3" target="_blank" rel="noopener noreferrer" class="twitter-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            @daishijtt3
+          </a>
+        </div>
+      </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="items.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
