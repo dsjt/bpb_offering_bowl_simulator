@@ -112,7 +112,7 @@ function getRoundFromStage(stage) {
 }
 
 
-let currentSort = { column: 'price', order: 'asc' };
+let currentSort = { column: 'price', order: 'desc' };
 let currentPool = { highTier: [], lowTier: [] };
 
 // アイテムプールの更新
