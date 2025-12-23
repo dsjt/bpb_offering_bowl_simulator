@@ -1208,7 +1208,7 @@ itemsData = {
         "レンジャー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "エサの盛り合わせ"
     },
     {
       "id": 280,
@@ -1230,7 +1230,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+        "special_items": "シャーマンの仮面"
     },
     {
       "id": 346,
@@ -1241,7 +1241,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "シャーマンの仮面"
     },
     {
       "id": 347,
@@ -1252,7 +1252,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "シャーマンの仮面"
     },
     {
       "id": 110,
@@ -1274,7 +1274,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "シャーマンの仮面"
     },
     {
       "id": 359,
@@ -1901,7 +1901,7 @@ itemsData = {
         "レンジャー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "エサの盛り合わせ"
     },
     {
       "id": 282,
@@ -2594,7 +2594,7 @@ itemsData = {
         "レンジャー"
       ],
       "crafted": false,
-      "special_items": false
+        "special_items": "エサの盛り合わせ"
     },
     {
       "id": 271,
@@ -2880,7 +2880,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ミスター・ストラグルズ"
     },
     {
       "id": 265,
@@ -2891,7 +2891,7 @@ itemsData = {
         "リーパー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ミスター・ストラグルズ"
     },
     {
       "id": 286,
@@ -2979,7 +2979,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+        "special_items": "狼の紋章"
     },
     {
       "id": 335,
@@ -3001,7 +3001,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "狼の紋章"
     },
     {
       "id": 350,
@@ -3012,7 +3012,7 @@ itemsData = {
         "バーサーカー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "狼の紋章"
     },
     {
       "id": 353,
