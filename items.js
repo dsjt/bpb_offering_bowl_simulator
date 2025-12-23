@@ -141,7 +141,7 @@ itemsData = {
         "all"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "イッツ・スライムタイム！"
     },
     {
       "id": 13,
@@ -1659,7 +1659,7 @@ itemsData = {
         "all"
       ],
       "crafted": false,
-        "special_items": true
+      "special_items": true
     },
     {
       "id": 146,
@@ -1967,7 +1967,7 @@ itemsData = {
         "all"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ルビーエッグ"
     },
     {
       "id": 170,
@@ -2088,7 +2088,7 @@ itemsData = {
         "パイロマンサー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ドラゴンの寝床"
     },
     {
       "id": 319,
@@ -2099,7 +2099,7 @@ itemsData = {
         "パイロマンサー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ドラゴンの寝床"
     },
     {
       "id": 320,
@@ -2110,7 +2110,7 @@ itemsData = {
         "パイロマンサー"
       ],
       "crafted": false,
-      "special_items": false
+      "special_items": "ドラゴンの寝床"
     },
     {
       "id": 322,
@@ -4256,7 +4256,7 @@ itemsData = {
         "パイロマンサー"
       ],
       "crafted": true,
-      "special_items": "フローズンフレイム"
+      "special_items": false
     },
     {
       "id": 275,
@@ -4832,4 +4832,26 @@ itemsData = {
       "special_items": false
     }
   ]
+};
+
+
+// 特殊出現アイテムの定義（アイテムIDで指定）
+const SPECIAL_ITEM_POOLS = {
+    'treasure_chest': [], // 富の宝箱: special_itemsフィールドで判定
+    'card_deck': [],      // カードデッキ: special_itemsフィールドで判定
+    'chessboard': [],     // チェスボード: special_itemsフィールドで判定
+    'dragon_nest': [],    // ドラゴンの寝床: special_itemsフィールドで判定
+    'frozen_flame': [     // フローズンフレイム: 氷結系アイテムのIDリスト
+        // ここにフローズンフレイムで追加されるアイテムIDを列挙
+        323, // 呪文の巻物：霜撃
+        383, // 氷結魔法の手引き
+        389, // 呪文の巻物：氷の障壁
+        152, // 凍てつく盾
+        175, // 氷の鎧
+        251, // スノーマスター
+        262, // アイスドラゴン
+        390, // コールドミラー
+        391, // アイスフラワー
+        393, // 貪食のスフィア
+    ]
 };

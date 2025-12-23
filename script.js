@@ -17,6 +17,8 @@ const RARITY_RATES = {
 // 高価格帯選択確率
 const HIGH_TIER_PROBABILITY = 0.9;
 
+let isRelativeScale = true; // 相対表示がデフォルト
+
 let chartInstance = null;
 
 // ページ読み込み時の初期化
@@ -29,18 +31,43 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
     const offeringAmount = document.getElementById('offering-amount');
     const offeringAmountValue = document.getElementById('offering-amount-value');
+    const offeringAmountInput = document.getElementById('offering-amount-input');
+
+    // offeringAmount.addEventListener('input', (e) => {
+    //     offeringAmountValue.textContent = e.target.value;
+    //     updateItemPool(); // リアルタイム更新
+    //     calculateProbabilities(); // 追加
+    // });
 
     offeringAmount.addEventListener('input', (e) => {
-        offeringAmountValue.textContent = e.target.value;
-        updateItemPool(); // リアルタイム更新
+        offeringAmountInput.value = e.target.value;
+        updateItemPool();
+        calculateProbabilities(); // 追加
     });
 
-    document.getElementById('round').addEventListener('change', updateItemPool);
-    document.querySelectorAll('[id^="badge-"]').forEach(cb => {
-        cb.addEventListener('change', updateItemPool);
+    offeringAmountInput.addEventListener('input', (e) => {
+        offeringAmount.value = e.target.value;
+        updateItemPool();
+        calculateProbabilities(); // 追加
     });
+
+    document.getElementById('round').addEventListener('change', () => {
+        updateItemPool();
+        calculateProbabilities();
+    });
+
+    document.querySelectorAll('[id^="badge-"]').forEach(cb => {
+        cb.addEventListener('change', () => {
+            updateItemPool();
+            calculateProbabilities();
+        });
+    });
+
     document.querySelectorAll('[id^="special-"]').forEach(cb => {
-        cb.addEventListener('change', updateItemPool);
+        cb.addEventListener('change', () => {
+            updateItemPool();
+            calculateProbabilities();
+        });
     });
 
     // テーブルのソート機能
@@ -48,22 +75,17 @@ function setupEventListeners() {
         th.addEventListener('click', () => sortTable(th.dataset.sort));
     });
 
-    document.getElementById('calculate-btn').addEventListener('click', calculateProbabilities);
-
-    const offeringAmountInput = document.getElementById('offering-amount-input');
-
-    offeringAmount.addEventListener('input', (e) => {
-        offeringAmountInput.value = e.target.value;
-        updateItemPool();
-    });
-
-    offeringAmountInput.addEventListener('input', (e) => {
-        offeringAmount.value = e.target.value;
-        updateItemPool();
+    // スケール切り替えボタン
+    document.getElementById('toggle-scale-btn').addEventListener('click', () => {
+        isRelativeScale = !isRelativeScale;
+        const btn = document.getElementById('toggle-scale-btn');
+        btn.textContent = isRelativeScale ? '絶対表示に切り替え' : '相対表示に切り替え';
+        displayItemPoolTable(); // 再描画
     });
 
     // 初期表示
     updateItemPool();
+    calculateProbabilities();
 }
 
 let currentSort = { column: 'price', order: 'asc' };
@@ -75,8 +97,12 @@ function updateItemPool() {
     const round = parseInt(document.getElementById('round').value);
 
     const badges = [];
-    document.querySelectorAll('[id^="badge-"]:checked').forEach(cb => {
-        badges.push(cb.value);
+    // 通常バッジのみを配列に追加（ストーンとレインボーは除外）
+    ['badge-leaf', 'badge-skull', 'badge-wolf', 'badge-magic', 'badge-string'].forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox.checked) {
+            badges.push(checkbox.value);
+        }
     });
 
     const specialItems = [];
@@ -110,8 +136,15 @@ function displayItemPoolTable() {
     // ソート
     const sorted = sortItems(allItems, currentSort.column, currentSort.order);
 
-    // 最大確率を取得（バーの長さ正規化用）
-    const maxProb = Math.max(...Object.values(itemProbabilities));
+    // スケールの決定
+    let maxProb;
+    if (isRelativeScale) {
+        // 相対表示: 最大値で正規化
+        maxProb = Math.max(...Object.values(itemProbabilities));
+    } else {
+        // 絶対表示: 100%固定
+        maxProb = 100;
+    }
 
     tbody.innerHTML = sorted.map(item => {
         const prob = itemProbabilities[item.id] || 0;
@@ -194,10 +227,27 @@ function sortItems(items, column, order) {
 // アイテムプールのフィルタリング
 function filterItemPool(round, badges, specialItems,budget) {
     const roundRates = RARITY_RATES[round];
-    const allowedClasses = ['all', 'パイロマンサー', ...badges];
+    const hasStone = document.getElementById('badge-stone').checked;
+    const hasRainbow = document.getElementById('badge-rainbow').checked;
+
+    // クラスフィルタの決定
+    let allowedClasses;
+    if (hasRainbow) {
+        // レインボーバッジ: すべてのクラス
+        allowedClasses = ['all', 'パイロマンサー', 'レンジャー', 'リーパー', 'バーサーカー', 'メイジ', 'アドベンチャラー'];
+    } else if (hasStone) {
+        // ストーンバッジ: パイロマンサーを除外
+        allowedClasses = ['all', ...badges];
+        // パイロマンサーは含めない
+    } else {
+        // 通常: パイロマンサー + 選択されたバッジ
+        allowedClasses = ['all', 'パイロマンサー', ...badges];
+    }
+
     const allowedSpecialItems = [false, ...specialItems];
 
-    return itemsData.items.filter(item => {
+
+    let filteredItems = itemsData.items.filter(item => {
         // 合成専用アイテムを除外
         if (item.crafted) return false;
 
@@ -207,18 +257,56 @@ function filterItemPool(round, badges, specialItems,budget) {
         // レアリティチェック（排出率が0%のレアリティは除外）
         if (!roundRates[item.rarity] || roundRates[item.rarity] === 0) return false;
 
-       // 予算チェック（追加）
+        // 予算チェック
         if (item.price > budget) return false;
+
+        // 特殊アイテムチェック
+        // false以外の時は除外
+        if (item.special_items) return false;
 
         // クラスチェック
         const hasMatchingClass = item.classes.some(cls => allowedClasses.includes(cls));
         if (!hasMatchingClass) return false;
 
-        // 特殊アイテムチェック
-        if (!allowedSpecialItems.includes(item.special_items)) return false;
-
         return true;
     });
+
+    // 特殊アイテムによる追加
+    specialItems.forEach(specialType => {
+        if (specialType === 'frozen_flame') {
+            // フローズンフレイム: 定義されたIDリストから追加
+            const frozenItems = itemsData.items.filter(item => {
+                return SPECIAL_ITEM_POOLS.frozen_flame.includes(item.id) &&
+                    !item.crafted &&
+                    item.rarity !== 'ユニーク' &&
+                    roundRates[item.rarity] > 0 &&
+                    item.price <= budget;
+            });
+            // 重複を避けて追加
+            frozenItems.forEach(item => {
+                if (!filteredItems.find(i => i.id === item.id)) {
+                    filteredItems.push(item);
+                }
+            });
+        } else {
+            // その他の特殊アイテム: special_itemsフィールドで判定
+            const specialTypeItems = itemsData.items.filter(item => {
+                return item.special_items === specialType &&
+                       !item.crafted &&
+                       item.rarity !== 'ユニーク' &&
+                       roundRates[item.rarity] > 0 &&
+                       item.price <= budget;
+            });
+            // 重複を避けて追加
+            specialTypeItems.forEach(item => {
+                if (!filteredItems.find(i => i.id === item.id)) {
+                    filteredItems.push(item);
+                }
+            });
+        }
+    });
+
+    return filteredItems;
 }
 
 // 価格帯の分割

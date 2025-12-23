@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>供物皿シミュレータ2 - Offering Bowl Simulator</title>
+    <title>供物皿シミュレータ - Offering Bowl Simulator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>供物皿シミュレータ2</h1>
+            <h1>供物皿シミュレータ</h1>
             <p class="subtitle">Offering Bowl Probability Calculator</p>
         </header>
 
@@ -29,11 +29,11 @@
             <div class="setting-group">
               <label for="round">ラウンド:(生成されるラウンド)</label>
               <select id="round">
-                <option value="2 selected">2</option>
+                <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
-                <option value="6">6</option>
+                <option value="6 selected">6</option>
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
@@ -47,11 +47,12 @@
               <label>バッジ:</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" id="badge-leaf" value="レンジャー"> リーフバッジ (レンジャー)</label>
-                <label><input type="checkbox" id="badge-skull" value="リーパー"> スカルバッジ (Reaper)</label>
-                <label><input type="checkbox" id="badge-wolf" value="バーサーカー"> ウルフバッジ (Berserker)</label>
-                <label><input type="checkbox" id="badge-magic" value="メイジ"> マジックバッジ (Mage)</label>
-                <label><input type="checkbox" id="badge-thread" value="アドベンチャラー"> 結び糸バッジ (Adventurer)</label>
-                <label><input type="checkbox" id="badge-stone" value="ストーン"> ストーンバッジ </label>
+                <label><input type="checkbox" id="badge-skull" value="リーパー"> スカルバッジ (リーパー)</label>
+                <label><input type="checkbox" id="badge-wolf" value="バーサーカー"> ウルフバッジ (バーサーカー)</label>
+                <label><input type="checkbox" id="badge-magic" value="メイジ"> マジックバッジ (メイジ)</label>
+                <label><input type="checkbox" id="badge-string" value="アドベンチャラー"> 結び糸バッジ (アドベンチャラー)</label>
+                <label><input type="checkbox" id="badge-stone" value="ストーン"> ストーンバッジ （除外）</label>
+                <label><input type="checkbox" id="badge-rainbow" value="レインボー"> レインボーバッジ （全クラス）</label>
               </div>
             </div>
 
@@ -59,11 +60,12 @@
               <label>特殊アイテム:</label>
               <div class="checkbox-group">
                 <label><input type="checkbox" id="special-treasure" value="富の宝箱"> 富の宝箱</label>
+                <label><input type="checkbox" id="special-card" value="カードデッキ"> カードデッキ</label>
                 <label><input type="checkbox" id="special-chessboard" value="チェスボード"> チェスボード</label>
-              </div>
+                <label><input type="checkbox" id="special-dragon" value="ドラゴンの寝床"> ドラゴンの寝床</label>
+                <label><input type="checkbox" id="special-frozen" value="frozen_flame"> フローズンフレイム</label></div>
             </div>
 
-            <button id="calculate-btn" class="calculate-btn">計算する</button>
           </div>
 
           <div class="right-panel">
@@ -75,7 +77,10 @@
               </div>
             </div>
             <div class="item-pool-panel">
-              <h2>アイテムプール</h2>
+              <div class="panel-header">
+                <h2>アイテムプール</h2>
+                <button id="toggle-scale-btn" class="toggle-scale-btn">絶対表示に切り替え</button>
+              </div>
               <table id="item-pool-table" class="item-table">
                 <thead>
                   <tr>
