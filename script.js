@@ -85,7 +85,7 @@ function setupEventListeners() {
         const toggleBtn = document.getElementById('toggle-method-btn');
         const runBtn = document.getElementById('run-simulation-btn');
 
-        toggleBtn.textContent = useDP ? 'シミュレーションに切り替え' : 'DPに切り替え';
+        toggleBtn.textContent = useDP ? 'シミュレーションに切り替え' : '厳密計算に切り替え';
         runBtn.style.display = useDP ? 'none' : 'block';
 
         calculateProbabilities(); // 切り替え時に自動実行
